@@ -1,7 +1,7 @@
 const container = document.querySelector(".webgl-container");
+
 let W = container.clientWidth;
 let H = container.clientHeight;
-const dummy = new THREE.Object3D();
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(W, H, false);
@@ -14,27 +14,27 @@ camera.position.z = 30;
 camera.position.x = 15;
 camera.position.y = -150;
 camera.rotation.set(1, -0.1, -0.6);
-let progress = 0;
 
 const clock = new THREE.Clock();
 
 const scene = new THREE.Scene();
-
-const rows = 20;
-const columns = 30;
-const instanceCount = rows * columns;
 
 const geometry = new THREE.PlaneBufferGeometry(5, 5, 1, 1);
 const material = new THREE.MeshBasicMaterial({
   color: 0xff2f00,
 });
 
+const rows = 20;
+const columns = 30;
+const instanceCount = rows * columns;
+const sectionWidth = 10;
+let dummy = new THREE.Object3D();
+let progress = 0;
+
 const mesh = new THREE.InstancedMesh(geometry, material, instanceCount);
 mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 
 scene.add(mesh);
-
-const sectionWidth = 10;
 
 window.addEventListener("resize", () => {
   W = container.clientWidth;
