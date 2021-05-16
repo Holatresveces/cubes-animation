@@ -5,8 +5,8 @@ const config = {
   speed: 0.3, // < 1 slower, > 1 faster
   displacedRows: 5, // number of displaced rows per loop
   xNoiseMultiplier: 200,
-  zNoiseMultiplier: 15,
-  scaleMultiplier: 0.07,
+  zNoiseMultiplier: 20,
+  scaleMultiplier: 0.065,
   backgroundColor: 0xff9500,
   cubesColor: 0xff2f00,
   fogDistance: 260, // smaller values -> stronger opacity effect
@@ -27,7 +27,7 @@ const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 300);
 camera.position.z = 90;
 camera.position.x = -50;
 camera.position.y = -120;
-camera.rotation.set(0.95, 0, -0.6);
+camera.rotation.set(0.75, 0, -0.6);
 
 const clock = new THREE.Clock();
 
