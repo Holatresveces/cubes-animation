@@ -1,4 +1,4 @@
-const container = document.querySelector(".container");
+const container = document.querySelector(".webgl-container");
 let W = container.clientWidth;
 let H = container.clientHeight;
 const dummy = new THREE.Object3D();
