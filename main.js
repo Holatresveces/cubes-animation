@@ -2,7 +2,7 @@ const config = {
   rows: 30,
   columns: 33,
   sectionWidth: 10,
-  speed: 0.3, // < 1 slower, > 1 faster
+  speed: 0.2, // < 1 slower, > 1 faster
   displacedRows: 5, // number of displaced rows per loop
   xNoiseMultiplier: 200,
   zNoiseMultiplier: 20,
@@ -60,7 +60,7 @@ window.addEventListener("resize", () => {
 requestAnimationFrame(loop);
 
 function loop() {
-  const time = clock.getElapsedTime();
+  const time = +(clock.getElapsedTime()).toFixed(3);
   progress = (time * config.speed) % 1;
 
   const yPos = mesh.position.y;
