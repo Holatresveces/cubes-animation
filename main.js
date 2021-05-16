@@ -1,11 +1,15 @@
 const config = {
-  rows: 18,
-  columns: 32,
+  rows: 30,
+  columns: 33,
   sectionWidth: 10,
   speed: 0.3, // < 1 slower, > 1 faster
+  displacedRows: 5, // number of displaced rows per loop
+  xNoiseMultiplier: 200,
+  zNoiseMultiplier: 15,
+  scaleMultiplier: 0.07,
   backgroundColor: 0xff9500,
   cubesColor: 0xff2f00,
-  fogDistance: 180,
+  fogDistance: 260, // smaller values -> stronger opacity effect
 };
 
 const container = document.querySelector(".webgl-container");
@@ -20,10 +24,10 @@ renderer.setClearColor(config.backgroundColor);
 container.appendChild(renderer.domElement);
 
 const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 300);
-camera.position.z = 30;
-camera.position.x = 15;
-camera.position.y = -140;
-camera.rotation.set(1, -0.1, -0.6);
+camera.position.z = 90;
+camera.position.x = -50;
+camera.position.y = -120;
+camera.rotation.set(0.95, 0, -0.6);
 
 const clock = new THREE.Clock();
 
@@ -61,25 +65,41 @@ function loop() {
 
   const yPos = mesh.position.y;
   mesh.position.y =
-    yPos <= -5 * config.sectionWidth ? 0 : -5 * config.sectionWidth * progress;
+    yPos <= -config.displacedRows * config.sectionWidth
+      ? 0
+      : -config.displacedRows * config.sectionWidth * progress;
 
   for (let i = 0; i < mesh.count; i++) {
     const xIndex = i % config.rows;
     const yIndex = Math.floor(i / config.rows);
 
-    var noiseVal =
-      ((Math.sin((yIndex + 5 * progress) / 5 + xIndex * 2 * Math.PI * 3.0) +
+    const loopIndex = yIndex * 2 * Math.PI * 3.0;
+
+    var noiseX =
+      ((Math.sin((yIndex + config.displacedRows * progress) / 5 + loopIndex) +
         1) /
         2) *
       0.8;
 
+    var noiseZ =
+      (Math.sin((xIndex + config.displacedRows * time) / 5 + loopIndex) + 1) /
+      2;
+
     let xStaticPosition =
       -config.sectionWidth * (xIndex - (config.rows - 1) / 2);
-    xStaticPosition -= noiseVal * 80.0;
+    xStaticPosition -= noiseX * config.xNoiseMultiplier;
     let yStaticPosition =
       -config.sectionWidth * (yIndex - (config.columns - 1) / 2);
-    dummy.position.set(xStaticPosition, yStaticPosition, noiseVal * 10);
-    const scale = (yIndex + 5 * progress) * 0.07;
+
+    dummy.position.set(
+      xStaticPosition,
+      yStaticPosition,
+      noiseZ * config.zNoiseMultiplier
+    );
+
+    const scale =
+      (yIndex + config.displacedRows * progress) * config.scaleMultiplier;
+
     dummy.scale.set(scale, scale, 1);
     dummy.updateMatrix();
     mesh.setMatrixAt(i, dummy.matrix);
